@@ -1,0 +1,29 @@
+---
+- name: Query ISS current location (iss-now.json)
+  hosts: localhost              # target ourselves
+  connection: local             # run actions locally
+  gather_facts: no
+
+  tasks:
+    - name: Call open-notify ISS position API
+      ansible.builtin.uri:
+        url: http://api.open-notify.org/iss-now.json
+        method: GET
+        return_content: true
+        status_code: 200
+        headers:
+          Accept: application/json
+      register: iss_now
+
+    - name: Show raw JSON (for troubleshooting)
+      ansible.builtin.debug:
+        var: iss_now.json
+
+    - name: Display a friendly message with ISS coordinates
+      ansible.builtin.debug:
+        msg:
+          - "Timestamp: {{ iss_now.json.timestamp }}"
+          - "ISS Latitude: {{ iss_now.json.iss_position.latitude }}"
+          - "ISS Longitude: {{ iss_now.json.iss_position.longitude }}"
+          - "Message: {{ iss_now.json.message }}"
+

@@ -1,0 +1,25 @@
+---
+- name: Query current people in space (astros.json)
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  
+  tasks:
+    - name: Call open-notify astronauts API
+      ansible.builtin.uri:
+        url: http://api.open-notify.org/astros.json
+        method: GET
+        return_content: true
+        status_code: 200
+        headers:
+          Accept: application/json
+      register: astros
+
+    - name: Show raw JSON (for troubleshooting)
+      ansible.builtin.debug:
+        var: astros.json
+
+    - name: Display count of people in space
+      ansible.builtin.debug:
+        msg: "Number of people currently in space: {{ astros.json.number }}"
+
