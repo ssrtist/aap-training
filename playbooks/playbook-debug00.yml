@@ -1,0 +1,25 @@
+---
+- name: Define ansible_facts
+  hosts: planetexpress
+  connection: ansible.builtin.ssh
+  gather_facts: true    # defines the variable ansible_facts
+
+  tasks:
+  
+    - name: Display ansible_facts
+      ansible.builtin.debug:
+        var: ansible_facts     # defined by gather_facts
+
+    # the option msg and var are mutually exclusive
+    # in the following example we use msg to create a custom message on the screen
+    - name: Display ansible_facts.os_family
+      ansible.builtin.debug:
+        msg: "This host belongs to the {{ ansible_facts.os_family }} family."
+
+        
+    # it is possible to drop "facts." from "ansible_facts" and still get the same result
+    - name: Display ansible_os_family (shortcut) 
+      ansible.builtin.debug:
+        msg: "This is a short-form of ansible_facts {{ ansible_os_family }} family."
+
+

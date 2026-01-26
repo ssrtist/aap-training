@@ -1,0 +1,16 @@
+---
+- name: Display multiple host variables
+  hosts: planetexpress
+  connection: ansible.builtin.ssh
+  gather_facts: true
+
+  tasks:
+
+    - name: Show host facts
+      ansible.builtin.debug:
+        msg:
+          - "Hostname: {{ inventory_hostname }}"
+          - "OS Family: {{ ansible_os_family }}"
+          - "Default IPv4: {{ ansible_default_ipv4.address | default('0.0.0.0') }}"  # notice the default() "filter"
+          - "Processor Count: {{ ansible_processor_vcpus }}"
+

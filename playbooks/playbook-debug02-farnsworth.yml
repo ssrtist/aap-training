@@ -1,0 +1,13 @@
+---
+- name: Demonstrating the debug module
+  hosts: farnsworth   # limit to just the host farnsworth
+  connection: ansible.builtin.ssh
+  gather_facts: true # audit the systems we are connecting to
+
+  tasks:
+
+    - name: Show all the facts
+      ansible.builtin.debug:
+        var: ansible_facts
+        # ansible_facts is defined by gather_facts
+
