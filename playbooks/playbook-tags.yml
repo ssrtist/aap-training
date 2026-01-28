@@ -1,0 +1,60 @@
+---
+- name: Demonstrate Ansible playbook tags
+  hosts: planetexpress
+  connection: ansible.builtin.ssh
+  gather_facts: false
+
+  vars:
+    cargo_items:
+      - "Slurm soda"
+      - "Delivery packages"
+      - "Space helmets"
+    mission_orders: "Deliver supplies to Mars Outpost 9"
+    navigation_notes: "Avoid the asteroid belt near Sector 12"
+
+  tasks:
+
+    - name: Create cargo manifest file (loop version)
+      ansible.builtin.copy:
+        dest: ~/cargo_manifest.txt
+        content: |
+          # Cargo Manifest
+      tags:
+        - cargo
+        - ship_prep
+
+    - name: Append each cargo item to manifest
+      ansible.builtin.lineinfile:
+        path: ~/cargo_manifest.txt
+        line: "- {{ item }}"
+      loop: "{{ cargo_items }}"
+      tags:
+        - cargo
+        - ship_prep
+
+    - name: Create mission orders file
+      ansible.builtin.copy:
+        dest: ~/orders.txt
+        content: |
+          # Mission Orders
+          Primary Mission:
+          {{ mission_orders }}
+      tags:
+        - orders
+
+    - name: Create navigation charts file
+      ansible.builtin.copy:
+        dest: ~/navigation_charts.cfg
+        content: |
+          # Navigation Charts
+          Notes: {{ navigation_notes }}
+      tags:
+        - nav
+        - ship_prep
+
+    - name: Display summary message
+      ansible.builtin.debug:
+        msg: "All tagged files have been created successfully!"
+      tags:
+        - summary
+
