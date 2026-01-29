@@ -1,0 +1,11 @@
+[windows]
+server2022
+
+[windows:vars]
+ansible_host=10.2.220.108
+ansible_user=student
+ansible_password=GoAlta3!
+ansible_connection=winrm 
+ansible_winrm_transport=basic
+ansible_port=5985    
+

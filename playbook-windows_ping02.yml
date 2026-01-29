@@ -1,0 +1,11 @@
+---
+- name: Testing Windows Connection
+  hosts: windows
+  connection: winrm
+
+  tasks:
+
+  - name: A windows version of the classic ping module
+    win_ping:
+       data: coconut           # Alternate data to return instead of 'pong'
+
